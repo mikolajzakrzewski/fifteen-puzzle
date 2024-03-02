@@ -39,17 +39,12 @@ def manhattan_distance(cell1, cell2):
 
 
 def hamming_distance(array1, array2):
-    return np.sum(array1 == array2)
-
-
-def hamming_distance(str1, str2):
-    if len(str1) != len(str2):
+    if len(array1) != len(array2):
         raise ValueError("The strings must have the same length.")
 
     distance = 0
-
-    for i in range(len(str1)):
-        if str1[i] != str2[i]:
+    for i in range(len(array1)):
+        if array1[i] != array2[i]:
             distance += 1
 
     return distance
