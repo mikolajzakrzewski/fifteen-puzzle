@@ -1,79 +1,58 @@
+import copy
 import sys
 
 import numpy as np
 
 from queue import Queue
 
-
-def move_empty_cell(layout, direction):
-    new_layout = np.copy(layout)
-    empty_cell_position = np.argwhere(new_layout == 0)
-    empty_row = empty_cell_position[0, 0]
-    empty_column = empty_cell_position[0, 1]
-    new_layout_height = new_layout.shape[0]
-    new_layout_width = new_layout.shape[1]
-    new_layout[empty_row, empty_column] = 0
-    if direction == 'L':
-        if empty_column != 0:
-            new_layout[empty_row, empty_column] = new_layout[empty_row, empty_column - 1]
-            new_layout[empty_row, empty_column - 1] = 0
-    elif direction == 'R':
-        if empty_column != new_layout_width - 1:
-            new_layout[empty_row, empty_column] = new_layout[empty_row, empty_column + 1]
-            new_layout[empty_row, empty_column + 1] = 0
-    elif direction == 'U':
-        if empty_row != 0:
-            new_layout[empty_row, empty_column] = new_layout[empty_row - 1, empty_column]
-            new_layout[empty_row - 1, empty_column] = 0
-    elif direction == 'D':
-        if empty_row != new_layout_height - 1:
-            new_layout[empty_row, empty_column] = new_layout[empty_row + 1, empty_column]
-            new_layout[empty_row + 1, empty_column] = 0
-    return new_layout
+import Board
 
 
-def bfs(search_order, starting_layout, goal_layout):
+def bfs(search_order, starting_board):
     queue = Queue()
-    queue.put(starting_layout)
+    queue.put(starting_board)
     visited_layouts = set()
     while queue.not_empty:
-        current_layout = queue.get()
+        current_board = queue.get()
         for direction in search_order:
-            new_layout = move_empty_cell(current_layout, direction)
-            if tuple(new_layout.flatten()) not in visited_layouts:
-                if np.array_equal(new_layout, goal_layout):
-                    print(new_layout)
-                    return new_layout
-                if not np.array_equal(new_layout, current_layout):
-                    queue.put(new_layout)
+            new_board = copy.deepcopy(current_board)
+            new_board.move_empty_cell(direction)
+            if tuple(new_board.layout.flatten()) not in visited_layouts:
+                if np.array_equal(new_board.layout, new_board.expected_layout):
+                    print(new_board.layout)
+                    print(new_board.moves)
+                    return new_board
+                if not np.array_equal(new_board.layout, current_board.layout):
+                    queue.put(new_board)
                     print(queue.qsize())
-                    visited_layouts.add(tuple(new_layout.flatten()))
-                    print(current_layout)
+                    visited_layouts.add(tuple(new_board.layout.flatten()))
+                    print(current_board.layout)
                     print(direction)
-                    print(new_layout)
+                    print(new_board.layout)
 
 
-def dfs(search_order, starting_layout, goal_layout):
-    stack = [starting_layout]
+def dfs(search_order, starting_board):
+    max_depth = 9
+    stack = [(starting_board, 0)]
     visited_layouts = set()
-
     while stack:
-        current_layout = stack.pop()
-        if tuple(current_layout.flatten()) not in visited_layouts:
-            visited_layouts.add(tuple(current_layout.flatten()))
-
-            if np.array_equal(current_layout, goal_layout):
-                print(current_layout)
-                return current_layout
-
-            for direction in search_order:
-                new_layout = move_empty_cell(current_layout, direction)
-                if tuple(new_layout.flatten()) not in visited_layouts:
-                    stack.append(new_layout)
-                    print(current_layout)
-                    print(direction)
-                    print(new_layout)
-                    print(len(visited_layouts))
+        current_board, depth = stack.pop()
+        if tuple(current_board.layout.flatten()) not in visited_layouts:
+            visited_layouts.add(tuple(current_board.layout.flatten()))
+            if np.array_equal(current_board.layout, current_board.expected_layout):
+                print(current_board.layout)
+                print(current_board.moves)
+                return current_board
+            if depth < max_depth:
+                for direction in search_order:
+                    new_board = copy.deepcopy(current_board)
+                    new_board.move_empty_cell(direction)
+                    if tuple(new_board.layout.flatten()) not in visited_layouts:
+                        stack.append((new_board, depth + 1))
+                        print(current_board.layout)
+                        print(direction)
+                        print(new_board.layout)
+                        print(len(visited_layouts))
 
 
 def manhattan_distance(cell1, cell2):
@@ -98,7 +77,6 @@ if __name__ == '__main__':
     input_filename = sys.argv[3]
     output_filename = sys.argv[4]
     additional_output_filename = sys.argv[5]
-
     input_file = open(input_filename, 'r')
     # output_file = open(output_filename, 'w')
     # output_file.close()
@@ -110,17 +88,11 @@ if __name__ == '__main__':
     height = input_file_contents_int[0]
     width = input_file_contents_int[1]
     original_layout = np.array(input_file_contents_int[2:], dtype=int).reshape((height, width))
-    expected_layout = np.zeros((height, width), dtype=int)
-    for i in range(height):
-        for j in range(width):
-            if i == height - 1 and j == width - 1:
-                expected_layout[i, j] = 0
-            else:
-                expected_layout[i, j] = i * width + j + 1
+    original_board = Board.Board(original_layout)
     if strategy == 'bfs':
-        bfs(additional_parameter, original_layout, expected_layout)
+        bfs(additional_parameter, original_board)
     elif strategy == 'dfs':
-        dfs(additional_parameter, original_layout, expected_layout)
+        dfs(additional_parameter, original_board)
     elif strategy == 'astr':
         print(strategy)
     else:
