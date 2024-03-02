@@ -53,6 +53,29 @@ def bfs(search_order, starting_layout, goal_layout):
                     print(new_layout)
 
 
+def dfs(search_order, starting_layout, goal_layout):
+    stack = [starting_layout]
+    visited_layouts = set()
+
+    while stack:
+        current_layout = stack.pop()
+        if tuple(current_layout.flatten()) not in visited_layouts:
+            visited_layouts.add(tuple(current_layout.flatten()))
+
+            if np.array_equal(current_layout, goal_layout):
+                print(current_layout)
+                return current_layout
+
+            for direction in search_order:
+                new_layout = move_empty_cell(current_layout, direction)
+                if tuple(new_layout.flatten()) not in visited_layouts:
+                    stack.append(new_layout)
+                    print(current_layout)
+                    print(direction)
+                    print(new_layout)
+                    print(len(visited_layouts))
+
+
 def manhattan_distance(cell1, cell2):
     return np.sum(np.abs(cell1 - cell2))
 
@@ -97,7 +120,7 @@ if __name__ == '__main__':
     if strategy == 'bfs':
         bfs(additional_parameter, original_layout, expected_layout)
     elif strategy == 'dfs':
-        print(strategy)
+        dfs(additional_parameter, original_layout, expected_layout)
     elif strategy == 'astr':
         print(strategy)
     else:
