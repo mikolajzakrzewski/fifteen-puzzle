@@ -2,6 +2,8 @@ import sys
 
 import numpy as np
 
+from queue import Queue
+
 
 def move_empty_cell(layout, direction):
     new_layout = np.copy(layout)
@@ -31,7 +33,24 @@ def move_empty_cell(layout, direction):
 
 
 def bfs(search_order, starting_layout, goal_layout):
-    print('dupa')
+    queue = Queue()
+    queue.put(starting_layout)
+    visited_layouts = set()
+    while queue.not_empty:
+        current_layout = queue.get()
+        for direction in search_order:
+            new_layout = move_empty_cell(current_layout, direction)
+            if tuple(new_layout.flatten()) not in visited_layouts:
+                if np.array_equal(new_layout, goal_layout):
+                    print(new_layout)
+                    return new_layout
+                if not np.array_equal(new_layout, current_layout):
+                    queue.put(new_layout)
+                    print(queue.qsize())
+                    visited_layouts.add(tuple(new_layout.flatten()))
+                    print(current_layout)
+                    print(direction)
+                    print(new_layout)
 
 
 def manhattan_distance(cell1, cell2):
