@@ -3,8 +3,43 @@ import sys
 import numpy as np
 
 
-def manhattan_distance(point1, point2):
-    return np.sum(np.abs(point1 - point2))
+def move_empty_cell(layout, direction):
+    new_layout = np.copy(layout)
+    empty_cell_position = np.argwhere(new_layout == 0)
+    empty_row = empty_cell_position[0, 0]
+    empty_column = empty_cell_position[0, 1]
+    new_layout_height = new_layout.shape[0]
+    new_layout_width = new_layout.shape[1]
+    new_layout[empty_row, empty_column] = 0
+    if direction == 'L':
+        if empty_column != 0:
+            new_layout[empty_row, empty_column] = new_layout[empty_row, empty_column - 1]
+            new_layout[empty_row, empty_column - 1] = 0
+    elif direction == 'R':
+        if empty_column != new_layout_width - 1:
+            new_layout[empty_row, empty_column] = new_layout[empty_row, empty_column + 1]
+            new_layout[empty_row, empty_column + 1] = 0
+    elif direction == 'U':
+        if empty_row != 0:
+            new_layout[empty_row, empty_column] = new_layout[empty_row - 1, empty_column]
+            new_layout[empty_row - 1, empty_column] = 0
+    elif direction == 'D':
+        if empty_row != new_layout_height - 1:
+            new_layout[empty_row, empty_column] = new_layout[empty_row + 1, empty_column]
+            new_layout[empty_row + 1, empty_column] = 0
+    return new_layout
+
+
+def bfs(search_order, starting_layout, goal_layout):
+    print('dupa')
+
+
+def manhattan_distance(cell1, cell2):
+    return np.sum(np.abs(cell1 - cell2))
+
+
+def hamming_distance(array1, array2):
+    return np.sum(array1 == array2)
 
 
 def hamming_distance(str1, str2):
@@ -29,8 +64,11 @@ if __name__ == '__main__':
 
     input_file = open(input_filename, 'r')
     # output_file = open(output_filename, 'w')
+    # output_file.close()
     # additional_output_file = open(additional_output_filename, 'w')
+    # additional_output_file.close()
     input_file_contents_str = input_file.read().split()
+    input_file.close()
     input_file_contents_int = [int(x) for x in input_file_contents_str]
     height = input_file_contents_int[0]
     width = input_file_contents_int[1]
@@ -41,7 +79,12 @@ if __name__ == '__main__':
             if i == height - 1 and j == width - 1:
                 expected_layout[i, j] = 0
             else:
-                expected_layout[i, j] = i * height + j + 1
-    input_file.close()
-    # output_file.close()
-    # additional_output_file.close()
+                expected_layout[i, j] = i * width + j + 1
+    if strategy == 'bfs':
+        bfs(additional_parameter, original_layout, expected_layout)
+    elif strategy == 'dfs':
+        print(strategy)
+    elif strategy == 'astr':
+        print(strategy)
+    else:
+        print('Invalid strategy')
