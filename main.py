@@ -34,7 +34,7 @@ def bfs(search_order, starting_board):
                     additional_output_file.write('\n' + str(len(visited_layouts)))
                     additional_output_file.write('\n' + str(len(visited_layouts) + queue.qsize()))
                     additional_output_file.write('\n' + str(len(new_board.moves)))
-                    additional_output_file.write('\n' + str(round(calculation_time, 3)))
+                    additional_output_file.write('\n' + str(round(calculation_time * 100, 3)))
                     additional_output_file.close()
                     return new_board
                 if not np.array_equal(new_board.layout, current_board.layout):
