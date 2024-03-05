@@ -1,5 +1,6 @@
 import copy
 import sys
+import time
 
 import numpy as np
 
@@ -9,6 +10,7 @@ import Board
 
 
 def bfs(search_order, starting_board):
+    start = time.time()
     queue = Queue()
     queue.put(starting_board)
     visited_layouts = set()
@@ -19,16 +21,29 @@ def bfs(search_order, starting_board):
             new_board.move_empty_cell(direction)
             if tuple(new_board.layout.flatten()) not in visited_layouts:
                 if np.array_equal(new_board.layout, new_board.expected_layout):
-                    print(new_board.layout)
-                    print(new_board.moves)
+                    end = time.time()
+                    calculation_time = end - start
+                    # print(new_board.layout)
+                    # print(new_board.moves)
+                    output_file = open(output_filename, 'w')
+                    output_file.write(str(len(new_board.moves)))
+                    output_file.write('\n' + new_board.moves)
+                    output_file.close()
+                    additional_output_file = open(additional_output_filename, 'w')
+                    additional_output_file.write(str(len(new_board.moves)))
+                    additional_output_file.write('\n' + str(len(visited_layouts)))
+                    additional_output_file.write('\n' + str(len(visited_layouts) + queue.qsize()))
+                    additional_output_file.write('\n' + str(len(new_board.moves)))
+                    additional_output_file.write('\n' + str(round(calculation_time, 3)))
+                    additional_output_file.close()
                     return new_board
                 if not np.array_equal(new_board.layout, current_board.layout):
                     queue.put(new_board)
-                    print(queue.qsize())
                     visited_layouts.add(tuple(new_board.layout.flatten()))
-                    print(current_board.layout)
-                    print(direction)
-                    print(new_board.layout)
+                    # print(queue.qsize())
+                    # print(current_board.layout)
+                    # print(direction)
+                    # print(new_board.layout)
 
 
 def dfs(search_order, starting_board):
