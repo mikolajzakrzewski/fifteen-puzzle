@@ -46,28 +46,27 @@ def bfs(search_order, starting_board):
                     # print(new_board.layout)
 
 
-def dfs(search_order, starting_board):
+def dfs(search_order, starting_board, depth):
     max_depth = 9
-    stack = [(starting_board, 0)]
     visited_layouts = set()
-    while stack:
-        current_board, depth = stack.pop()
-        if tuple(current_board.layout.flatten()) not in visited_layouts:
-            visited_layouts.add(tuple(current_board.layout.flatten()))
-            if np.array_equal(current_board.layout, current_board.expected_layout):
-                print(current_board.layout)
-                print(current_board.moves)
-                return current_board
-            if depth < max_depth:
-                for direction in search_order:
-                    new_board = copy.deepcopy(current_board)
-                    new_board.move_empty_cell(direction)
-                    if tuple(new_board.layout.flatten()) not in visited_layouts:
-                        stack.append((new_board, depth + 1))
-                        print(current_board.layout)
-                        print(direction)
-                        print(new_board.layout)
-                        print(len(visited_layouts))
+    if tuple(starting_board.layout.flatten()) not in visited_layouts:
+        visited_layouts.add(tuple(starting_board.layout.flatten()))
+        if np.array_equal(starting_board.layout, starting_board.expected_layout):
+            print(starting_board.layout)
+            print(starting_board.moves)
+            return starting_board
+        if depth < max_depth:
+            for direction in search_order:
+                new_board = copy.deepcopy(starting_board)
+                new_board.move_empty_cell(direction)
+                if tuple(new_board.layout.flatten()) not in visited_layouts:
+                    print(starting_board.layout)
+                    print(direction)
+                    print(new_board.layout)
+                    print(len(visited_layouts))
+                    result = dfs(search_order, new_board, depth=depth+1)
+                    if result is not None:
+                        return result
 
 
 def manhattan_distance(cell1, cell2):
@@ -107,7 +106,7 @@ if __name__ == '__main__':
     if strategy == 'bfs':
         bfs(additional_parameter, original_board)
     elif strategy == 'dfs':
-        dfs(additional_parameter, original_board)
+        dfs(additional_parameter, original_board, depth=0)
     elif strategy == 'astr':
         print(strategy)
     else:
