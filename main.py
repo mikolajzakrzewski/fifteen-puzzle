@@ -25,17 +25,8 @@ def bfs(search_order, starting_board):
                     calculation_time = end - start
                     # print(new_board.layout)
                     # print(new_board.moves)
-                    output_file = open(output_filename, 'w')
-                    output_file.write(str(len(new_board.moves)))
-                    output_file.write('\n' + new_board.moves)
-                    output_file.close()
-                    additional_output_file = open(additional_output_filename, 'w')
-                    additional_output_file.write(str(len(new_board.moves)))
-                    additional_output_file.write('\n' + str(len(visited_layouts)))
-                    additional_output_file.write('\n' + str(len(visited_layouts) + queue.qsize()))
-                    additional_output_file.write('\n' + str(len(new_board.moves)))
-                    additional_output_file.write('\n' + str(round(calculation_time * 100, 3)))
-                    additional_output_file.close()
+                    write_to_file(output_filename, additional_output_filename, new_board.moves, visited_layouts,
+                                  queue.qsize(), calculation_time)
                     return new_board
                 if not np.array_equal(new_board.layout, current_board.layout):
                     queue.put(new_board)
@@ -47,6 +38,7 @@ def bfs(search_order, starting_board):
 
 
 def dfs(search_order, starting_board, depth):
+    start = time.time()
     max_depth = 9
     visited_layouts = set()
     if tuple(starting_board.layout.flatten()) not in visited_layouts:
@@ -54,19 +46,32 @@ def dfs(search_order, starting_board, depth):
         if np.array_equal(starting_board.layout, starting_board.expected_layout):
             print(starting_board.layout)
             print(starting_board.moves)
+            end = time.time()
+            calculation_time = end - start
+            write_to_file(output_filename, additional_output_filename, starting_board.moves, visited_layouts, depth,
+                          calculation_time)
             return starting_board
         if depth < max_depth:
             for direction in search_order:
                 new_board = copy.deepcopy(starting_board)
                 new_board.move_empty_cell(direction)
                 if tuple(new_board.layout.flatten()) not in visited_layouts:
-                    print(starting_board.layout)
-                    print(direction)
-                    print(new_board.layout)
-                    print(len(visited_layouts))
                     result = dfs(search_order, new_board, depth=depth+1)
                     if result is not None:
                         return result
+
+
+def write_to_file(output_filename, additional_output_filename, moves, visited_layouts, queue_size, calculation_time):
+    with open(output_filename, 'w') as output_file:
+        output_file.write(str(len(moves)))
+        output_file.write('\n' + moves)
+
+    with open(additional_output_filename, 'w') as additional_output_file:
+        additional_output_file.write(str(len(moves)))
+        additional_output_file.write('\n' + str(len(visited_layouts)))
+        additional_output_file.write('\n' + str(len(visited_layouts) + queue_size))
+        additional_output_file.write('\n' + str(len(moves)))
+        additional_output_file.write('\n' + str(round(calculation_time * 100, 3)))
 
 
 def manhattan_distance(cell1, cell2):
