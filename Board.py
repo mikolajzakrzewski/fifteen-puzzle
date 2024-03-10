@@ -46,3 +46,9 @@ class Board:
                 else:
                     expected_layout[i, j] = i * width + j + 1
         return expected_layout
+
+    def __lt__(self, other):
+        return len(self.moves) < len(other.moves)
+
+    def __eq__(self, other):
+        return len(self.moves) == len(other.moves)

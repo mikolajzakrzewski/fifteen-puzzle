@@ -24,18 +24,12 @@ def bfs(search_order, starting_board):
                 if np.array_equal(new_board.layout, new_board.expected_layout):
                     end = time.time()
                     calculation_time = end - start
-                    # print(new_board.layout)
-                    # print(new_board.moves)
                     write_to_file(output_filename, additional_output_filename, new_board.moves, visited_layouts,
                                   queue.qsize(), calculation_time)
                     return new_board
-                if not np.array_equal(new_board.layout, current_board.layout):
+                else:
                     queue.put(new_board)
                     visited_layouts.add(tuple(new_board.layout.flatten()))
-                    # print(queue.qsize())
-                    # print(current_board.layout)
-                    # print(direction)
-                    # print(new_board.layout)
 
 
 def dfs(search_order, starting_board, depth):
@@ -63,10 +57,29 @@ def dfs(search_order, starting_board, depth):
 
 
 def a_star_manhattan(starting_board):
+    start = time.time()
     priority_queue = PriorityQueue()
-    priority_queue.put(manhattan_distance_layout(starting_board.layout, starting_board.expected_layout), starting_board)
+    priority_queue.put(
+        (len(starting_board.moves) + manhattan_distance_layout(starting_board.layout, starting_board.expected_layout), starting_board)
+    )
+    visited_layouts = set()
     while not priority_queue.empty():
-        current_board = priority_queue.get()
+        current_board = priority_queue.get()[1]
+        for direction in 'LRUD':
+            new_board = copy.deepcopy(current_board)
+            new_board.move_empty_cell(direction)
+            if tuple(new_board.layout.flatten()) not in visited_layouts:
+                if np.array_equal(new_board.layout, new_board.expected_layout):
+                    end = time.time()
+                    calculation_time = end - start
+                    write_to_file(output_filename, additional_output_filename, new_board.moves, visited_layouts,
+                                  priority_queue.qsize(), calculation_time)
+                    return new_board
+                else:
+                    priority_queue.put(
+                        (len(new_board.moves) + manhattan_distance_layout(new_board.layout, new_board.expected_layout), new_board)
+                    )
+                    visited_layouts.add(tuple(new_board.layout.flatten()))
 
 
 def a_star_hamming(starting_board):
