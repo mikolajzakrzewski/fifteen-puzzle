@@ -5,6 +5,7 @@ import time
 import numpy as np
 
 from queue import Queue
+from queue import PriorityQueue
 
 import Board
 
@@ -61,6 +62,17 @@ def dfs(search_order, starting_board, depth):
                         return result
 
 
+def a_star_manhattan(starting_board):
+    priority_queue = PriorityQueue()
+    priority_queue.put(manhattan_distance_layout(starting_board.layout, starting_board.expected_layout), starting_board)
+    while not priority_queue.empty():
+        current_board = priority_queue.get()
+
+
+def a_star_hamming(starting_board):
+    print('placeholder')
+
+
 def write_to_file(output_filename, additional_output_filename, moves, visited_layouts, queue_size, calculation_time):
     with open(output_filename, 'w') as output_file:
         output_file.write(str(len(moves)))
@@ -74,8 +86,19 @@ def write_to_file(output_filename, additional_output_filename, moves, visited_la
         additional_output_file.write('\n' + str(round(calculation_time * 100, 3)))
 
 
-def manhattan_distance(cell1, cell2):
+def manhattan_distance_cell(cell1, cell2):
     return np.sum(np.abs(cell1 - cell2))
+
+
+def manhattan_distance_layout(layout1, layout2):
+    total_manhattan_distance = 0
+    for i in range(len(layout1)):
+        for j in range(np.shape(layout1)[1]):
+            cell1_position = np.argwhere(layout1 == layout1[i][j])
+            cell2_position = np.argwhere(layout2 == layout1[i][j])
+            total_manhattan_distance += manhattan_distance_cell(cell1_position, cell2_position)
+
+    return total_manhattan_distance
 
 
 def hamming_distance(array1, array2):
@@ -113,6 +136,11 @@ if __name__ == '__main__':
     elif strategy == 'dfs':
         dfs(additional_parameter, original_board, depth=0)
     elif strategy == 'astr':
-        print(strategy)
+        if additional_parameter == 'manh':
+            a_star_manhattan(original_board)
+        elif additional_parameter == 'hamm':
+            a_star_hamming(original_board)
+        else:
+            print("Invalid additional parameter")
     else:
         print('Invalid strategy')
