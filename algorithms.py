@@ -35,7 +35,7 @@ def dfs(search_order, starting_board, depth):
     max_depth = 20
     visited_states = None
     if visited_states is None:
-        visited_states = set()
+        visited_states = {}
 
     stack = [(starting_board, depth)]
 
@@ -43,10 +43,10 @@ def dfs(search_order, starting_board, depth):
         current_board, current_depth = stack.pop()
         current_state = tuple(current_board.layout.flatten())
 
-        if current_state in visited_states:
+        if current_state in visited_states and visited_states[current_state] <= current_depth:
             continue
 
-        visited_states.add(current_state)
+        visited_states[current_state] = current_depth
 
         if np.array_equal(current_board.layout, current_board.expected_layout):
             print(current_board.layout)
@@ -58,7 +58,7 @@ def dfs(search_order, starting_board, depth):
             return current_board
 
         if current_depth < max_depth:
-            for direction in search_order:
+            for direction in search_order[::-1]:
                 new_board = copy.deepcopy(current_board)
                 new_board.move_empty_cell(direction)
                 stack.append((new_board, current_depth + 1))
