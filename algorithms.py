@@ -33,25 +33,35 @@ def bfs(search_order, starting_board):
 def dfs(search_order, starting_board, depth):
     start = time.time()
     max_depth = 20
-    visited_layouts = set()
-    if tuple(starting_board.layout.flatten()) not in visited_layouts:
-        visited_layouts.add(tuple(starting_board.layout.flatten()))
-        if np.array_equal(starting_board.layout, starting_board.expected_layout):
-            print(starting_board.layout)
-            print(starting_board.moves)
+    visited_states = None
+    if visited_states is None:
+        visited_states = set()
+
+    stack = [(starting_board, depth)]
+
+    while stack:
+        current_board, current_depth = stack.pop()
+        current_state = tuple(current_board.layout.flatten())
+
+        if current_state in visited_states:
+            continue
+
+        visited_states.add(current_state)
+
+        if np.array_equal(current_board.layout, current_board.expected_layout):
+            print(current_board.layout)
+            print(current_board.moves)
             end = time.time()
             calculation_time = end - start
-            calc.write_to_file(starting_board.moves, visited_layouts, depth,
+            calc.write_to_file(current_board.moves, visited_states, current_depth,
                                calculation_time)
-            return starting_board
-        if depth < max_depth:
+            return current_board
+
+        if current_depth < max_depth:
             for direction in search_order:
-                new_board = copy.deepcopy(starting_board)
+                new_board = copy.deepcopy(current_board)
                 new_board.move_empty_cell(direction)
-                if tuple(new_board.layout.flatten()) not in visited_layouts:
-                    result = dfs(search_order, new_board, depth=depth + 1)
-                    if result is not None:
-                        return result
+                stack.append((new_board, current_depth + 1))
 
 
 def a_star_manhattan(starting_board):
