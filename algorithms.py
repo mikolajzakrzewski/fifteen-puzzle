@@ -33,9 +33,8 @@ def bfs(search_order, starting_board):
 def dfs(search_order, starting_board, depth):
     start = time.time()
     max_depth = 20
-    visited_states = None
-    if visited_states is None:
-        visited_states = {}
+
+    visited_states = {}
 
     stack = [(starting_board, depth)]
 
