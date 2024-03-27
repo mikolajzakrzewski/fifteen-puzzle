@@ -30,7 +30,7 @@ def hamming_distance(array1, array2):
     return distance
 
 
-def write_to_file(moves, visited_layouts, queue_size, calculation_time):
+def write_to_file(moves, visited_states_num, processed_states_num, max_reached_depth, calculation_time):
     output_filename = sys.argv[4]
     additional_output_filename = sys.argv[5]
     with open(output_filename, 'w') as output_file:
@@ -39,7 +39,7 @@ def write_to_file(moves, visited_layouts, queue_size, calculation_time):
 
     with open(additional_output_filename, 'w') as additional_output_file:
         additional_output_file.write(str(len(moves)))
-        additional_output_file.write('\n' + str(len(visited_layouts)))
-        additional_output_file.write('\n' + str(len(visited_layouts) + queue_size))
-        additional_output_file.write('\n' + str(len(moves)))
+        additional_output_file.write('\n' + str(visited_states_num))
+        additional_output_file.write('\n' + str(processed_states_num))
+        additional_output_file.write('\n' + str(max_reached_depth))
         additional_output_file.write('\n' + str(round(calculation_time * 100, 3)))

@@ -24,7 +24,7 @@ if __name__ == '__main__':
     if strategy == 'bfs':
         alg.bfs(additional_parameter, original_board)
     elif strategy == 'dfs':
-        alg.dfs(additional_parameter, original_board, depth=0)
+        alg.dfs(additional_parameter, original_board)
     elif strategy == 'astr':
         if additional_parameter == 'manh':
             alg.a_star_manhattan(original_board)
