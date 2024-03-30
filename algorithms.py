@@ -60,8 +60,6 @@ def dfs(search_order, starting_board):
         visited_states[current_state] = current_depth
 
         if np.array_equal(current_board.layout, current_board.expected_layout):
-            print(current_board.layout)
-            print(current_board.moves)
             end = time.time()
             calculation_time = end - start
             utils.write_to_file(
@@ -119,7 +117,6 @@ def a_star_manhattan(starting_board):
                     visited_layouts.add(tuple(new_board.layout.flatten()))
                     if len(new_board.moves) > max_reached_depth:
                         max_reached_depth = len(new_board.moves)
-                        print(new_board.moves)
 
 
 def a_star_hamming(starting_board):
@@ -160,4 +157,3 @@ def a_star_hamming(starting_board):
                     visited_states_num += 1
                     if len(new_board.moves) > max_reached_depth:
                         max_reached_depth = len(new_board.moves)
-                        print(new_board.moves)
