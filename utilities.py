@@ -31,8 +31,8 @@ def hamming_distance(array1, array2):
 
 
 def write_to_file(moves, visited_states_num, processed_states_num, max_reached_depth, calculation_time):
-    output_filename = sys.argv[4]
-    additional_output_filename = sys.argv[5]
+    output_filename = 'solutions/' + sys.argv[4]
+    additional_output_filename = 'solutions/' + sys.argv[5]
     with open(output_filename, 'w') as output_file:
         output_file.write(str(len(moves)))
         output_file.write('\n' + moves)
