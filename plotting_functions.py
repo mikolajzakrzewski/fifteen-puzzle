@@ -16,6 +16,7 @@ def read_data(criterium, strategies, solution_distances, additional_parameters):
                     file_contents = solution_file.readlines()
                     arithmetic_mean += float(file_contents[criterium])
                     iterations += 1
+                    solution_file.close()
 
             arithmetic_mean /= iterations
             total_values.append(arithmetic_mean)
