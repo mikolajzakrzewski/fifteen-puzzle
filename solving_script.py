@@ -36,5 +36,5 @@ def solve_astr():
 
 if __name__ == '__main__':
     solve_bfs()
-    solve_dfs()
+    # solve_dfs()
     solve_astr()

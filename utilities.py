@@ -1,3 +1,4 @@
+import os.path
 import sys
 
 import numpy as np
@@ -31,8 +32,18 @@ def hamming_distance(array1, array2):
 
 
 def write_to_file(moves, visited_states_num, processed_states_num, max_reached_depth, calculation_time):
-    output_filename = 'solutions/' + sys.argv[4]
-    additional_output_filename = 'solutions/' + sys.argv[5]
+    first_index = sys.argv[4].find('_')
+    second_index = sys.argv[4].find('_', first_index + 1)
+    layout_distance = sys.argv[4][first_index + 1:second_index].lstrip('0')
+    third_index = sys.argv[4].find('_', second_index + 1)
+    fourth_index = sys.argv[4].find('_', third_index + 1)
+    strategy = sys.argv[4][third_index + 1:fourth_index]
+    fifth_index = sys.argv[4].find('_', fourth_index + 1)
+    additional_parameter = sys.argv[4][fourth_index + 1:fifth_index]
+    output_filename = os.path.join('solutions', strategy, layout_distance, additional_parameter, sys.argv[4])
+    os.makedirs(os.path.dirname(output_filename), exist_ok=True)
+    additional_output_filename = os.path.join('stats', strategy, layout_distance, additional_parameter, sys.argv[5])
+    os.makedirs(os.path.dirname(additional_output_filename), exist_ok=True)
     with open(output_filename, 'w') as output_file:
         output_file.write(str(len(moves)))
         output_file.write('\n' + moves)
@@ -43,3 +54,6 @@ def write_to_file(moves, visited_states_num, processed_states_num, max_reached_d
         additional_output_file.write('\n' + str(processed_states_num))
         additional_output_file.write('\n' + str(max_reached_depth))
         additional_output_file.write('\n' + str(round(calculation_time * 100, 3)))
+
+    output_file.close()
+    additional_output_file.close()
