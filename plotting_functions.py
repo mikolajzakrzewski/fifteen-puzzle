@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def read_data(criterium, strategies, solution_distances, additional_parameters):
+def read_data(criterion, strategies, solution_distances, additional_parameters):
     total_values = []
     for strategy in strategies:
         for solution_distance in solution_distances:
@@ -12,11 +12,10 @@ def read_data(criterium, strategies, solution_distances, additional_parameters):
             for additional_parameter in additional_parameters:
                 for filename in os.listdir(os.path.join('stats', strategy, solution_distance, additional_parameter)):
                     filename = os.path.join('stats', strategy, solution_distance, additional_parameter, filename)
-                    solution_file = open(filename, 'r')
-                    file_contents = solution_file.readlines()
-                    arithmetic_mean += float(file_contents[criterium])
-                    iterations += 1
-                    solution_file.close()
+                    with open(filename, 'r+') as solution_file:
+                        file_contents = solution_file.readlines()
+                        arithmetic_mean += float(file_contents[criterion])
+                        iterations += 1
 
             arithmetic_mean /= iterations
             total_values.append(arithmetic_mean)
@@ -24,7 +23,7 @@ def read_data(criterium, strategies, solution_distances, additional_parameters):
     return total_values
 
 
-def plot_results(plot_data, plot_title, criterium, labels):
+def plot_results(plot_data, plot_title, criterion, labels):
     width = 0.5 / len(plot_data)
     ind = np.arange(1, len(plot_data[0]) + 1)
     for i in range(len(plot_data)):
@@ -33,7 +32,7 @@ def plot_results(plot_data, plot_title, criterium, labels):
     plt.legend(labels, loc='upper left')
     plt.title(plot_title, fontsize=14)
     plt.xlabel('Głębokość', fontsize=14)
-    plt.ylabel(criterium, fontsize=14)
+    plt.ylabel(criterion, fontsize=14)
     plt.xticks(ind + width * (len(plot_data) - 1) / 2, ind)
     plt.show()
 

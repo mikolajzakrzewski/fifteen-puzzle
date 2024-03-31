@@ -54,6 +54,3 @@ def write_to_file(moves, visited_states_num, processed_states_num, max_reached_d
         additional_output_file.write('\n' + str(processed_states_num))
         additional_output_file.write('\n' + str(max_reached_depth))
         additional_output_file.write('\n' + str(round(calculation_time * 100, 3)))
-
-    output_file.close()
-    additional_output_file.close()

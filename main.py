@@ -9,9 +9,9 @@ if __name__ == '__main__':
     strategy = sys.argv[1]
     additional_parameter = sys.argv[2]
     input_filename = 'layouts/' + sys.argv[3]
-    input_file = open(input_filename, 'r')
-    input_file_contents_str = input_file.read().split()
-    input_file.close()
+    with open(input_filename, 'r') as input_file:
+        input_file_contents_str = input_file.read().split()
+
     input_file_contents_int = [int(x) for x in input_file_contents_str]
     height = input_file_contents_int[0]
     width = input_file_contents_int[1]
