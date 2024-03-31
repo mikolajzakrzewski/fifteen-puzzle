@@ -13,7 +13,7 @@ def bfs(search_order, starting_board):
     queue = Queue()
     queue.put(starting_board)
     visited_layouts = set()
-    visited_states_num = 0
+    visited_states_num = 1
     processed_states_num = 0
     max_reached_depth = 0
     while queue.not_empty:
@@ -40,7 +40,7 @@ def bfs(search_order, starting_board):
 
 def dfs(search_order, starting_board):
     start = time.time()
-    visited_states_num = 0
+    visited_states_num = 1
     processed_states_num = 0
     max_reached_depth = 0
     max_allowed_depth = 20
@@ -79,7 +79,7 @@ def dfs(search_order, starting_board):
 
 def a_star_manhattan(starting_board):
     start = time.time()
-    visited_states_num = 0
+    visited_states_num = 1
     processed_states_num = 0
     max_reached_depth = 0
     priority_queue = PriorityQueue()
@@ -121,7 +121,7 @@ def a_star_manhattan(starting_board):
 
 def a_star_hamming(starting_board):
     start = time.time()
-    visited_states_num = 0
+    visited_states_num = 1
     processed_states_num = 0
     max_reached_depth = 0
     priority_queue = PriorityQueue()
