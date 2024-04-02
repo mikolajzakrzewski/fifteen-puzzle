@@ -9,6 +9,7 @@ from queue import PriorityQueue
 
 
 def bfs(search_order, starting_board):
+    max_steps = 1000000
     start = time.time()
     queue = Queue()
     queue.put(starting_board)
@@ -16,7 +17,8 @@ def bfs(search_order, starting_board):
     visited_states_num = 1
     processed_states_num = 0
     max_reached_depth = 0
-    while queue.not_empty:
+    steps = 0
+    while not queue.empty() and steps < max_steps:
         current_board = queue.get()
         processed_states_num += 1
         for direction in search_order:
@@ -36,9 +38,15 @@ def bfs(search_order, starting_board):
                     visited_layouts.add(tuple(new_board.layout.flatten()))
                     if len(new_board.moves) > max_reached_depth:
                         max_reached_depth = len(new_board.moves)
+        steps += 1
+    print("dupa")
+    end_time = time.time()
+    utils.write_to_file(None, visited_states_num, processed_states_num, max_reached_depth, (end_time - start))
+    return None
 
 
 def dfs(search_order, starting_board):
+    max_steps = 10000000
     start = time.time()
     visited_states_num = 1
     processed_states_num = 0
@@ -48,8 +56,9 @@ def dfs(search_order, starting_board):
     visited_states = {}
 
     stack = [(starting_board, 0)]
+    steps = 0
 
-    while stack:
+    while stack and steps < max_steps:
         current_board, current_depth = stack.pop()
         processed_states_num += 1
         current_state = tuple(current_board.layout.flatten())
@@ -75,6 +84,11 @@ def dfs(search_order, starting_board):
                 visited_states_num += 1
                 if current_depth + 1 > max_reached_depth:
                     max_reached_depth = current_depth + 1
+        steps += 1
+    print("dupa")
+    end_time = time.time()
+    utils.write_to_file(None, visited_states_num, processed_states_num, max_reached_depth, (end_time - start))
+    return None
 
 
 def a_star_manhattan(starting_board):

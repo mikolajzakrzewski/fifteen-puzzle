@@ -8,7 +8,7 @@ import algorithms as alg
 if __name__ == '__main__':
     strategy = sys.argv[1]
     additional_parameter = sys.argv[2]
-    input_filename = 'layouts/' + sys.argv[3]
+    input_filename = sys.argv[3]
     with open(input_filename, 'r') as input_file:
         input_file_contents_str = input_file.read().split()
 
