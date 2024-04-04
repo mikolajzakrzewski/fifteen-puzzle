@@ -13,10 +13,9 @@ if __name__ == '__main__':
                 'Czas trwania procesu obliczeniowego']
 
     pf.plot_results_general(
-        ['bfs', 'astr'], criteria, solution_distances, [search_orders, heuristics], ['BFS', 'A*'], 'Ogółem'
-        # ['bfs', 'dfs', 'astr'], criteria, solution_distances,
-        # [search_orders, search_orders, heuristics], ['BFS', 'DFS', 'A*'], 'Ogółem'
+        ['bfs', 'dfs', 'astr'], criteria, solution_distances,
+        [search_orders, search_orders, heuristics], ['BFS', 'DFS', 'A*'], 'Ogółem'
     )
     pf.plot_results_strategy('astr', criteria, solution_distances, heuristics, heuristics_labels, 'A*')
     pf.plot_results_strategy('bfs', criteria, solution_distances, search_orders, search_orders_labels, 'BFS')
-    # pf.plot_results_strategy('dfs', criteria, solution_distances, search_orders, 'DFS')
+    pf.plot_results_strategy('dfs', criteria, solution_distances, search_orders, search_orders_labels, 'DFS')
