@@ -12,9 +12,10 @@ def manhattan_distance_layout(layout1, layout2):
     total_manhattan_distance = 0
     for i in range(len(layout1)):
         for j in range(np.shape(layout1)[1]):
-            cell1_position = np.argwhere(layout1 == layout1[i][j])
-            cell2_position = np.argwhere(layout2 == layout1[i][j])
-            total_manhattan_distance += manhattan_distance_cell(cell1_position, cell2_position)
+            if layout1[i][j] != 0:
+                cell1_position = np.argwhere(layout1 == layout1[i][j])
+                cell2_position = np.argwhere(layout2 == layout1[i][j])
+                total_manhattan_distance += manhattan_distance_cell(cell1_position, cell2_position)
 
     return total_manhattan_distance
 
@@ -25,7 +26,7 @@ def hamming_distance(array1, array2):
 
     distance = 0
     for i in range(len(array1)):
-        if array1[i] != array2[i]:
+        if array1[i] != array2[i] and array1[i] != 0:
             distance += 1
 
     return distance
@@ -44,25 +45,20 @@ def write_to_file(moves, visited_states_num, processed_states_num, max_reached_d
     os.makedirs(os.path.dirname(output_filename), exist_ok=True)
     additional_output_filename = os.path.join('stats', strategy, layout_distance, additional_parameter, sys.argv[5])
     os.makedirs(os.path.dirname(additional_output_filename), exist_ok=True)
-    if moves is None:
-        with open(output_filename, 'w') as output_file:
+    with open(output_filename, 'w') as output_file:
+        if moves is None:
             output_file.write('-1')
-    else:
-        with open(output_filename, 'w') as output_file:
+        else:
             output_file.write(str(len(moves)))
             output_file.write('\n' + moves)
 
-    if moves is None:
-        with open(additional_output_filename, 'w') as additional_output_file:
+    with open(additional_output_filename, 'w') as additional_output_file:
+        if moves is None:
             additional_output_file.write('-1')
-            additional_output_file.write('\n' + str(visited_states_num))
-            additional_output_file.write('\n' + str(processed_states_num))
-            additional_output_file.write('\n' + str(max_reached_depth))
-            additional_output_file.write('\n' + str(round(calculation_time * 100, 3)))
-    else:
-        with open(additional_output_filename, 'w') as additional_output_file:
+        else:
             additional_output_file.write(str(len(moves)))
-            additional_output_file.write('\n' + str(visited_states_num))
-            additional_output_file.write('\n' + str(processed_states_num))
-            additional_output_file.write('\n' + str(max_reached_depth))
-            additional_output_file.write('\n' + str(round(calculation_time * 100, 3)))
+
+        additional_output_file.write('\n' + str(visited_states_num))
+        additional_output_file.write('\n' + str(processed_states_num))
+        additional_output_file.write('\n' + str(max_reached_depth))
+        additional_output_file.write('\n' + str(round(calculation_time * 100, 3)))
