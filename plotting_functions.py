@@ -24,16 +24,23 @@ def read_data(criterion, strategies, solution_distances, additional_parameters):
 
 
 def plot_results(plot_data, plot_title, criterion, labels):
+    plt.figure(figsize=(8, 6))
     width = 0.5 / len(plot_data)
     ind = np.arange(1, len(plot_data[0]) + 1)
     for i in range(len(plot_data)):
         plt.bar(ind + width * i, plot_data[i], width=width)
 
-    plt.legend(labels, loc='upper left')
-    plt.title(plot_title, fontsize=14)
-    plt.xlabel('Głębokość', fontsize=14)
-    plt.ylabel(criterion, fontsize=14)
-    plt.xticks(ind + width * (len(plot_data) - 1) / 2, ind)
+    if len(labels) > 4:
+        legend_col_num = 2
+    else:
+        legend_col_num = 1
+
+    plt.legend(labels, ncol=legend_col_num, loc='upper left', fontsize=13)
+    plt.title(plot_title, fontsize=15)
+    plt.xlabel('Głębokość', fontsize=15)
+    plt.ylabel(criterion, fontsize=15)
+    plt.xticks(ind + width * (len(plot_data) - 1) / 2, ind, fontsize=11)
+    plt.yticks(fontsize=11)
     plt.show()
 
 
