@@ -41,6 +41,10 @@ def plot_results(plot_data, plot_title, criterion, labels):
     plt.ylabel(criterion, fontsize=15)
     plt.xticks(ind + width * (len(plot_data) - 1) / 2, ind, fontsize=11)
     plt.yticks(fontsize=11)
+    y_min, y_max = np.min(plot_data), np.max(plot_data)
+    if y_min / y_max < 0.01:
+        plt.yscale('log')
+
     plt.show()
 
 
