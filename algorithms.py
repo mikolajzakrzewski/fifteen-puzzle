@@ -23,6 +23,9 @@ def bfs(search_order, starting_board):
             new_board = copy.deepcopy(current_board)
             new_board.move_empty_cell(direction)
             if tuple(new_board.layout.flatten()) not in visited_layouts:
+                if len(new_board.moves) > max_reached_depth:
+                    max_reached_depth = len(new_board.moves)
+
                 if np.array_equal(new_board.layout, new_board.expected_layout):
                     end = time.time()
                     calculation_time = end - start
@@ -34,8 +37,6 @@ def bfs(search_order, starting_board):
                     queue.put(new_board)
                     visited_states_num += 1
                     visited_layouts.add(tuple(new_board.layout.flatten()))
-                    if len(new_board.moves) > max_reached_depth:
-                        max_reached_depth = len(new_board.moves)
 
     utils.write_to_file(None, visited_states_num, processed_states_num, max_reached_depth, time.time() - start)
     return None
@@ -109,7 +110,7 @@ def a_star_manhattan(starting_board):
                         new_board.moves,
                         visited_states_num,
                         processed_states_num,
-                        max_reached_depth + 1,
+                        max_reached_depth,
                         calculation_time
                     )
                     return new_board
@@ -153,7 +154,7 @@ def a_star_hamming(starting_board):
                         new_board.moves,
                         visited_states_num,
                         processed_states_num,
-                        max_reached_depth + 1,
+                        max_reached_depth,
                         calculation_time
                     )
                     return new_board
