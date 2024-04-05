@@ -10,7 +10,7 @@ if __name__ == '__main__':
                 'Liczba stanów odwiedzonych',
                 'Liczba stanów przetworzonych',
                 'Maksymalna osiągnięta głebokość rekursji',
-                'Czas trwania procesu obliczeniowego']
+                'Czas trwania procesu obliczeniowego [ms]']
 
     pf.plot_results_general(
         ['bfs', 'dfs', 'astr'], criteria, solution_distances,
