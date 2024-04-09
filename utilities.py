@@ -21,9 +21,6 @@ def manhattan_distance_layout(layout1, layout2):
 
 
 def hamming_distance(array1, array2):
-    if len(array1) != len(array2):
-        raise ValueError("The strings must have the same length.")
-
     distance = 0
     for i in range(len(array1)):
         if array1[i] != array2[i] and array1[i] != 0:
