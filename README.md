@@ -1,7 +1,7 @@
 
 # Fifteen puzzle solver
 
-Program for solving fifteen puzzle layouts using chosen strategies (bfs/dfs/astr) with given search orders (LRUD permutations) or heuristics (hamm/manh).
+Program for solving fifteen puzzle layouts using chosen strategies (bfs/dfs/astr) with given search orders (LRUD permutations) or heuristics (hamm/manh). Layouts with shapes other than a typical 4x4 fifteen puzzle are also supported.
 
 
 ## Run Locally
@@ -44,6 +44,20 @@ where:
 <additional_output_file> = txt file for additional output data
 ```
 
+The input file must follow specific formatting e.g.
+
+```bash
+<layout_height> <layout_width>
+2 5 1 7
+3 11 13 6
+14 4 8 9
+10 12 15 0
+```
+and must be in a directory called
+
+```bash
+layouts/
+```
 
 ## Authors
 
